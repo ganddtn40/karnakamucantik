@@ -2,20 +2,11 @@
   "name": "karna-kamu-cantik",
   "version": "1.0.0",
   "description": "Kamu Cantik, Kamu Baik! - Love lyrics animation",
-  "main": "main.js",
+  "private": true,
   "scripts": {
-    "start": "electron .",
-    "app": "node start.js",
     "dev": "node server.js"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
-  "type": "commonjs",
-  "dependencies": {
-    "express": "^5.1.0"
-  },
-  "devDependencies": {
-    "electron": "^37.0.0"
-  }
+  "license": "ISC"
 }
