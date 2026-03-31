@@ -1,1 +1,1 @@
-webbb
+🎵 Kamu Cantik Animation — A minimalist, aesthetic web application featuring interactive music lyrics with a smooth typing animation effect. Built with pure HTML/CSS/JS and optimized for Vercel deployment.
