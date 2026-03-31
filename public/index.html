@@ -2,7 +2,10 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Kamu Cantik, Kamu Baik! - A love lyrics animation">
     <title>&lt;3</title>
+    <link rel="icon" type="image/png" href="assets/love.png">
     <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
     <style>
         @font-face {
@@ -10,6 +13,7 @@
             src: url('fonts/8bit.ttf') format('truetype');
         }
 
+        /* Electron title bar - hidden in browser */
         #custom-title-bar {
             -webkit-app-region: drag;
             height: 35px;
@@ -44,15 +48,24 @@
         #window-controls button img {
             width: 20px;
             height: 20px;
-            filter: brightness(0) invert(1); /* agar warna putih di atas pink */
+            filter: brightness(0) invert(1);
         }
 
         #window-controls button:hover img {
             filter: brightness(0.9) invert(1) drop-shadow(0 0 2px white);
         }
 
+        /* Hide title bar in browser mode */
+        body.browser-mode #custom-title-bar {
+            display: none;
+        }
+
+        body.browser-mode {
+            padding-top: 0 !important;
+        }
+
         body {
-            padding-top: 35px; /* Untuk topbar */
+            padding-top: 35px;
             margin: 0;
             padding: 0;
             background: url('cute.gif') no-repeat center center fixed;
@@ -83,29 +96,50 @@
             0%, 50% { opacity: 1; }
             51%, 100% { opacity: 0; }
         }
+
+        /* Responsive for mobile */
+        @media (max-width: 768px) {
+            #lyrics {
+                font-size: 1.6em;
+                padding: 20px;
+                min-width: 85%;
+                margin: 0 10px;
+            }
+        }
     </style>
 </head>
 <body>
     <div id="custom-title-bar">
         <div class="title">Kamu Cantik, Kamu Baik! &lt;3</div>
         <div id="window-controls">
-            <button id="home-btn"><img src="assets/home.png"></button>
-            <button id="max-btn"><img src="assets/maximize.png"></button>
-            <button id="close-btn"><img src="assets/close.png"></button>
+            <button id="home-btn"><img src="assets/home.png" alt="Home"></button>
+            <button id="max-btn"><img src="assets/maximize.png" alt="Maximize"></button>
+            <button id="close-btn"><img src="assets/close.png" alt="Close"></button>
         </div>
     </div>
 
     <div id="lyrics"><span id="text"></span><span class="cursor">|</span></div>
 
     <script>
+        // Detect if running in Electron or Browser
+        const isElectron = typeof window.electronAPI !== 'undefined';
+
+        if (!isElectron) {
+            document.body.classList.add('browser-mode');
+        }
+
         document.getElementById('home-btn').addEventListener('click', () => {
             location.reload();
         });
         document.getElementById('max-btn').addEventListener('click', () => {
-            window.electronAPI.sendWindowControl('maximize');
+            if (isElectron) {
+                window.electronAPI.sendWindowControl('maximize');
+            }
         });
         document.getElementById('close-btn').addEventListener('click', () => {
-            window.electronAPI.sendWindowControl('close');
+            if (isElectron) {
+                window.electronAPI.sendWindowControl('close');
+            }
         });
 
         const lyrics = [
