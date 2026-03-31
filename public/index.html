@@ -119,14 +119,51 @@
     </div>
 
     <div id="lyrics"><span id="text"></span><span class="cursor">|</span></div>
+    <audio id="bg-music" src="assets/kamucantik.mp3" loop></audio>
+
+    <div id="start-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; z-index: 10000; cursor: pointer;">
+        <div style="background: #ff9aab; padding: 20px 40px; border-radius: 50px; font-size: 1.5em; color: white; box-shadow: 0 0 20px rgba(255,154,171,0.5); animation: pulse 2s infinite;">
+            Klik untuk Memulai <3
+        </div>
+    </div>
+
+    <style>
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        #start-overlay.hidden {
+            display: none !important;
+        }
+    </style>
 
     <script>
         // Detect if running in Electron or Browser
         const isElectron = typeof window.electronAPI !== 'undefined';
+        const music = document.getElementById('bg-music');
+        const overlay = document.getElementById('start-overlay');
 
         if (!isElectron) {
             document.body.classList.add('browser-mode');
         }
+
+        let animationStarted = false;
+        function startApp() {
+            music.play().then(() => {
+                overlay.classList.add('hidden');
+                if (!animationStarted) {
+                    animationStarted = true;
+                    typeLine();
+                }
+            }).catch(err => {
+                console.log("Autoplay blocked or failed, waiting for user interaction...");
+            });
+        }
+
+        overlay.addEventListener('click', () => {
+            startApp();
+        });
 
         document.getElementById('home-btn').addEventListener('click', () => {
             location.reload();
@@ -191,7 +228,8 @@
             }
         }
 
-        setTimeout(typeLine, 0);
+        // Try to start automatically (works in some browsers/Electron)
+        startApp();
     </script>
 </body>
 </html>
